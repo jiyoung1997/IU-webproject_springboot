@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+
+<html xmlns:th="http://www.thymeleaf.org">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<script src='https://code.jquery.com/jquery-3.3.1.min.js'></script>
+<link th:href="@{/css/login.css}" rel="stylesheet"/>
+
+<body>
+<input type="hidden" name="MEMID">
+
+<section class="login-form">
+
+  <!-- 1. 로고 -->
+  <h1>회원가입</h1>
+  <form action="inputsave" method="post" name="form1">
+
+
+    <!-- 2. 필드 -->
+    <div class="int-area">
+      <input type="text" name="MEMID" id="MEMID"  autocomplete="off" required>
+      <label for="MEM_ID">USER NAME</label>
+      <button id="IdChk" type="button" class="check-btn">중복확인</button>
+    </div>
+
+    <div class="int-area">
+      <input type="password" name="MEMPW"  autocomplete="off" required>
+      <label for="MEM_PW">PASSWORD</label>
+    </div>
+
+    <div class="int-area">
+      <input type="text" name="MEMNAME" autocomplete="off" required>
+      <label for="MEM_NAME">이름</label>
+    </div>
+
+    <div class="int-area">
+      <input type="text" name="MEMNICKNAME" id="MEMNICKNAME" autocomplete="off" required>
+      <label for="MEM_NICKNAME">닉네임</label>
+      <button id="NicChk" type="button" class="check-btn">중복확인</button>
+    </div>
+
+
+    <!-- 3. 필드(성별) -->
+    <div class="birth-area">
+      <div>
+        <label for="MEM_SB">성별</label>&emsp;&emsp;
+        <input type="radio" name="MEMSB" value="남성"  autocomplete="off" required>
+        <label for="MEM_SB">남성</label>&emsp;&emsp;
+        <input type="radio" name="MEMSB" value="여성" autocomplete="off" required>
+        <label for="MEM_SB">여성</label>
+      </div>
+    </div>
+
+
+    <!-- 4. 필드(생년월일) -->
+    <div class="int-area">
+      <div>
+        <h2>생년월일</h2>
+        <input type="date" name="MEMBIRTH"  autocomplete="off" required >
+        <label for="mem_birth"></label>
+      </div>
+    </div>
+
+
+    <!-- 5. 이메일_전화번호 -->
+    <div class="int-area">
+      <input type="email" name="MEMEMAIL"  autocomplete="off" required>
+      <label for="MEM_email">이메일</label>
+    </div>
+
+    <div class="int-area">
+      <input type="text" name="MEMADDRESS"  autocomplete="off" required>
+      <label for="MEM_ADDRESS">주소</label>
+    </div>
+
+    <div class="int-area">
+      <input type="text" name="MEMTEL"  autocomplete="off" required>
+      <label for="MEM_TEL">전화번호</label>
+    </div>
+
+
+    <!-- 6. 가입하기 버튼 -->
+    <div class="btn-area">
+      <input type="submit" th:value="가입하기" th:onclick="check()" class="login-btn">
+    </div>
+
+    <div class="caption">
+      <!--나중에 메인으로 가게 바꾸기 잊지말기!-->
+      <a th:href="login">돌아가기</a>
+    </div>
+
+  </form>
+
+</section>
+
+</body>
+
+</html>

@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+
+<html xmlns:th="http://www.thymeleaf.org">
+<!--div th:replace="header::menu"></div>-->
+<div th:replace="top::top"></div>
+<link th:href="@{/css/board_write.css}" rel="stylesheet"/>
+
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+<script src="https://kit.fontawesome.com/8d3fc93edf.js" crossorigin="anonymous"></script>
+
+<body>
+
+
+<div class="container">
+  <div class="cover">
+
+    <div class="contents">
+      <div class="line">
+        <span>게시글 수정</span>
+      </div>
+
+      <div class="form">
+
+
+        <form th:action="ptupdate" method="post" enctype="multipart/form-data">
+          <table border="1" align="center">
+            <input type="hidden" name="PTNO" th:value="${photoEntity.PTNO }">
+            <td th:text="${#temporals.format(photoEntity.PTWRITEDAY, 'yyyy년MM월dd일')}" hidden></td>
+            <input type="hidden" name="PTREADCNT" th:value="${photoEntity.PTREADCNT}">
+
+            <div class="line-title">
+              <label >제목</label>
+              <input type="text" name="PTTITLE" th:value="${photoEntity.PTTITLE}" placeholder="제목" class="title">
+            </div>
+
+            <div class="line-write">
+              <label >작성자</label><br>
+              <input type="text" name="PTWRITER" th:value="${loginUser.MEMNICKNAME}" class="writer" readonly><br>
+            </div>
+
+            <div class="line-content">
+              <label>내용</label>
+              <textarea id="subject" name="PTCONTENT" th:placeholder="${photoEntity.PTCONTENT}" style="height:200px" class="content"></textarea>
+            </div>
+
+            <label>이미지</label>
+            <div class="upload">
+              <button type="button" class="btn-warning">
+                <i class="fa-solid fa-upload"></i>
+                Upload file
+                <input type="file" name="PTPICTURE" >
+              </button>
+            </div>
+
+            <div class="boardsubmit">
+              <input type="submit" value="수정" class="submit-btn">
+              <input type="button" value="취소" onclick="location.href='ptout'" class="submit-btn">
+            </div>
+
+
+
+
+          </table>
+
+
+        </form>
+
+      </div></div></div></div>
+</body>
+<div th:replace="footer::footer"></div>
+</html>

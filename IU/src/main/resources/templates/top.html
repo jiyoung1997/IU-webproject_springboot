@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+
+<html xmlns:th="http://www.thymeleaf.org" th:fragment="top">
+<link th:href="@{/css/top.css}" rel="stylesheet"/>
+
+<body>
+<!-- header 영역 -->
+<header>
+
+  <nav class="navbar">
+    <div class="navbar_logo">
+      <a th:href="main"><img th:src="@{/image/iulogo.jpg}" class="logo">UAENA</a>
+    </div>
+
+    <ul class="navbar_menu">
+      <li><a href="aboutiu">About IU</a></li>
+      <li><a href="ntout">공지사항</a></li>
+      <li><a href="melon">앨범소개</a></li>
+      <li><a href="boout">자유게시판</a></li>
+      <li><a href="ptout">포토게시판</a></li>
+      <li><a href="lout">편지</a></li>
+    </ul>
+
+    <ul class="navbar_icons">
+        <li><a href="https://www.instagram.com/dlwlrma/"><i class="fa-brands fa-instagram"></i></a></li>
+        <li><a href="https://www.youtube.com/c/dlwlrma"><i class="fa-brands fa-youtube"></i></a></li>
+        <li><a href="https://twitter.com/_IUofficial"><i class="fa-brands fa-twitter"></i></a></li>
+        <li></li>
+
+    <th:block data-th-if="${loginUser != null}">
+      <li th:text="${loginUser.MEMNICKNAME}+'님'"></li>
+      <li><a th:href="@{logout}" th:text="'LOGOUT'"></a></li>
+    </th:block>
+    <th:block data-th-if="${loginUser == null}">
+      <li><a th:href="@{login}" th:text="'LOGIN'"></a></li>
+    </th:block>
+
+
+    </ul>
+
+    <a href="#" class="navbar_toogleBtn"> <i class="fa-solid fa-bars"></i>
+    </a>
+  </nav>
+</header>
+<!-- header 영역 끝 -->
+
+</body>
+
+</html>

@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+
+<html xmlns:th="http://www.thymeleaf.org">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<script src='https://code.jquery.com/jquery-3.3.1.min.js'></script>
+<link th:href="@{/css/main.css}" rel="stylesheet"/>
+<body>
+<div class="hero">
+
+  <video autoplay loop muted plays-inline class="back-video">
+    <source th:src="@{/image/IU3.mp4}" type="video/mp4">
+
+  </video>
+
+  <header>
+    <div class="line">
+      <a href="main"><img th:src="@{/image/iulogo.jpg}" class="logo"></a>
+      <ul class="snsicons">
+
+        <li><a href="https://www.instagram.com/dlwlrma/" th:text="'Instagram'"></a></li>
+        <li><a href="https://www.youtube.com/c/dlwlrma"th:text="'Youtube'"></a></li>
+        <li><a href="https://twitter.com/_IUofficial" th:text="'Twitter'"></a></li>
+
+      </ul>
+    </div>
+  </header>
+
+
+  <div class="content">
+    <h4 th:text="'IU FanPage'"></h4>
+    <br>
+
+    <th:block data-th-if="${loginUser != null}">
+      <div class="logout-btn">
+        <p style="font-family: 'InkLipquid'; color: white; font-size: 30px; margin-bottom: 35px"
+           th:text="'반가워요!'+${loginUser.MEMNICKNAME}+'님'">
+      </div>
+      <a th:href="@{logout}" style="text-align: center; border: 3px solid white; padding: 5px 22px;"
+         th:text="'logout'"></a>
+
+    </th:block>
+
+    <th:block data-th-if="${loginUser == null}">
+      <a th:href="@{input}" th:text="'Sign Up'"></a>
+      <a th:href="@{login}" th:text="'login'"></a>
+    </th:block>
+
+  </div>
+
+
+</div>
+
+<!-- 햄버거메뉴 클릭시 나오는 검은모달창 -->
+<div class="menuicon">
+  <input type="checkbox" id="popup"> <label for="popup" class="menubtn">
+  <span></span>
+  <span></span>
+  <span></span>
+</label>
+
+  <div>
+    <label for="popup">
+      <ul class="menulist">
+        <li><a href="aboutiu">About IU</a></li>
+        <li><a href="ntout">공지사항</a></li>
+        <li><a href="melon">앨범소개</a></li>
+        <li><a href="boout">자유게시판</a></li>
+        <li><a href="ptout">포토게시판</a></li>
+        <li><a href="lout">편지</a></li>
+      </ul>
+    </label>
+  </div>
+</div>
+<!-- 햄버거메뉴 클릭시 나오는 검은모달창 -->
+</body>
+
+</html>

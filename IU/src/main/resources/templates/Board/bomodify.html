@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+
+<html xmlns:th="http://www.thymeleaf.org">
+<div th:replace="top::top"></div>
+
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+<script src="https://kit.fontawesome.com/8d3fc93edf.js" crossorigin="anonymous"></script>
+
+<link th:href="@{/css/board_write.css}" rel="stylesheet"/>
+
+<body>
+
+<div class="container">
+  <div class="cover">
+
+    <div class="contents">
+      <div class="line">
+        <span>게시글 수정</span>
+      </div>
+
+      <div class="form" th:each="list:${list}">
+        <form action="boupdate" method="post" enctype="multipart/form-data" >
+
+            <input type="hidden" name="BONO" th:value="${list.BONO }" class="title">
+            <input type="hidden" name="LTWRITEDAY" th:value="${list.BOWRITEDAY}">
+            <input type="hidden" name="BOREADCNT" th:value="${list.BOREADCNT}">
+
+            <div class="line-title">
+              <label >제목</label>
+              <input type="text" name="BOTITLE" placeholder="제목" class="title" th:value="${list.BOTITLE}">
+            </div>
+
+            <div class="line-write">
+              <label >작성자</label><br>
+              <input type="text" th:value="${loginUser.MEMNICKNAME}" name="BOWRITER"  class="writer"><br>
+            </div>
+
+            <div class="line-content">
+              <label>내용</label>
+              <textarea id="subject" name="BOCONTENT" th:placeholder="${list.BOCONTENT}" style="height:200px" class="content"></textarea>
+            </div>
+
+            <label>이미지</label>
+            <div class="upload">
+              <button type="button" class="btn-warning" id="bo_picture">
+                <i class="fa-solid fa-upload"></i>
+                Upload file
+                <input type="file" name="BOPICTURE">
+              </button>
+            </div>
+
+            <div class="boardsubmit">
+              <input type="submit" value="수정" class="submit-btn">
+              <input type="button" value="취소" th:onclick="location.href='boout'" class="submit-btn">
+            </div>
+
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+</body>
+<div th:replace="footer::footer"></div>
+
+
+</html>

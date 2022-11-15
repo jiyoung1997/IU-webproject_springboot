@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+
+<html xmlns:th="http://www.thymeleaf.org">
+<div th:replace="top::top"></div>
+<link th:href="@{/css/photoboard.css}" rel="stylesheet"/>
+
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+<script src="https://kit.fontawesome.com/8d3fc93edf.js" crossorigin="anonymous"></script>
+
+<body>
+
+
+<!-- 목록 영역 -->
+
+<div class="container">
+    <div class="cover">
+
+        <div class="contents">
+
+            <div class="line">
+                <span>포토게시판</span>
+            </div>
+
+            <!-- 검색 영역 -->
+            <form action="ptsearch" method="post">
+                <ul class="searchbar">
+
+                    <li><input class="put" type="text" name="svalue" placeholder="제목 검색"></li>
+                    <li><input type="submit" value="검색" class="search-btn"></li>
+                    <li>
+                        <a href="ptout" style="font-size: 19px;"><i class="fa-solid fa-rotate-right"></i></a>
+                    </li>
+                </ul>
+            </form>
+            <!-- 검색 영역 끝 -->
+        </div>
+        <div class="main">
+            <!-- 사진 Grid -->
+            <div class="row">
+
+                <div class="column" th:each="list : ${list}">
+                    <div class="content">
+                        <a th:href="@{ptdetail(PTNO=${list.PTNO})}" class="imgbox">
+
+                            <img th:src="@{/uploadimg/}+${list.PTPICTURE}" width="154px" height="154px">
+                        </a>
+
+                       <!-- <div style="color:#DB7093;" th:text=""></div>-->
+                        <h3 th:text="${list.PTTITLE}+'['+${list.PTRECNT}+']'"></h3>
+                        <p th:text="${list.PTWRITER}"></p>
+                        <p th:text="'추천수:'+${list.PTLIKE}"><i class="fa-solid fa-thumbs-up"></i></p>
+                        <p th:text="${#temporals.format(list.PTWRITEDAY, 'yyyy년MM월dd일')}"></p>
+
+
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+        <!-- main 끝 -->
+
+        <!-- 글쓰기 버튼 -->
+        <div class="gotowrite">
+            <th:block data-th-if="${loginUser != null}">  <!-- 로그인값이 null이 아닐때 -->
+                <input type="button" value="글쓰기" onclick="location.href='ptinput'" class="write-btn"
+                       style="text-align: center"><br>
+            </th:block>
+        </div>
+        <!-- 글쓰기 버튼 끝 -->
+
+
+        <!--페이징 처리 수정-->
+        <div class="page"
+             th:with="start=${(pages.number/maxPage)*maxPage + 1},
+                  end=(${(pages.totalPages == 0) ? 1 : (start + (maxPage - 1) < pages.totalPages ? start + (maxPage - 1) : pages.totalPages)})">
+            <span th:if="${start > 1}">
+          <a th:href="@{/ptout?(page=0)}" th:text="'<<'"></a>
+            </span>
+
+            <span th:if="${start > 1}">
+          <a th:href="@{/ptout?(page=${start - maxPage})}" th:text="'<'" ></a>
+        </span>
+
+
+            <span th:each="page: ${#numbers.sequence(start, end)}">
+          <a th:href="@{/ptout?(page=${page-1})}" th:text="${page}"></a>
+            </span>
+
+            <span th:if="${end < pages.totalPages}">
+          <a th:href="@{/ptout?(page=${start + maxPage - 1})}" th:text="'>'"></a>
+        </span>
+
+            <span th:if="${end < pages.totalPages}">
+          <a th:href="@{/ptout?(page=${pages.totalPages-1})}" th:text="'>>'"></a>
+            </span>
+
+
+        </div>
+    </div>
+</div>
+</body>
+<div th:replace="footer::footer"></div>
+
+</html>
+
+

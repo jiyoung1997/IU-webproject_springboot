@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+
+<html xmlns:th="http://www.thymeleaf.org">
+<div th:replace="top::top"></div>
+
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+<script src="https://kit.fontawesome.com/8d3fc93edf.js" crossorigin="anonymous"></script>
+
+<link th:href="@{/css/board_write.css}" rel="stylesheet"/>
+
+<script type="text/javascript">
+
+	function check2()
+	{
+		var f = document.form2;
+
+		//제목
+		var vtitle = /^[A-Za-z0-9가-힣]/;
+		var ctitle = document.form2.NTTITLE.value;
+		if(ctitle=="")
+			{
+				alert("제목을 입력해주세요.");
+				document.form2.NTTITLE.select();
+				return false;
+			}
+
+		//내용
+		var vcontent = /^[A-Za-z0-9가-힣]/;
+		var ccontent = document.form2.NTCONTENT.value;
+		if(ccontent=="")
+			{
+				alert("내용을 입력해주세요.");
+				document.form2.NTCONTENT.select();
+				return false;
+			}
+
+		alert("작성완료되었습니다.");
+		f.submit();
+	}
+
+</script>
+
+<body>
+
+<div class="container">
+    <div class="cover">
+
+        <div class="contents">
+            <div class="line">
+                <span> 공지사항 글쓰기 </span>
+            </div>
+
+            <div class="form">
+                <form action="ntsave" method="post" name="form2">
+
+                    <div class="line-title">
+                        <label >제목</label>
+                        <input type="text" name="NTTITLE" placeholder="제목" class="title">
+                    </div>
+
+                    <div class="line-write">
+                        <label >작성자</label><br>
+                        <input type="text" th:value="${loginUser.MEMNICKNAME}" name="NTWRITER" class="writer"><br>
+                    </div>
+
+                    <div class="line-content">
+                        <label>내용</label>
+                        <textarea id="subject" name="NTCONTENT" placeholder="내용을 입력하세요.." style="height:200px" class="content"></textarea>
+                    </div>
+                    <div class="boardsubmit">
+                        <input type="button" value="등록" class="submit-btn"  onclick="check2()">
+                    </div>
+
+                </form>
+            </div>
+        </div>
+
+        <div class="gotoboard">
+            <input type="button" value="목록" class="list-btn" th:onclick="location.href='ntout'">
+        </div>
+    </div>
+</div>
+
+</body>
+<div th:replace="footer::footer"></div>
+
+</html>

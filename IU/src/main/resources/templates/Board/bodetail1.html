@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+
+<html xmlns:th="http://www.thymeleaf.org">
+<div th:replace="top::top"></div>
+
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+<script src="https://kit.fontawesome.com/8d3fc93edf.js" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css"></script>
+<link href="//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+
+<link th:href="@{/css/board-detail.css}" rel="stylesheet"/>
+<script th:src="@{/js/rerply.js}" defer></script>
+
+<script type="text/javascript">
+
+function check2()
+{
+   var f = document.form1;
+
+   //댓글 작성자
+   var vwriter = /^[A-Za-z0-9가-힣]/;
+   var cwriter = document.form1.BOWRITER.value;
+
+   if(cwriter == "")
+   {
+      alert("로그인 해야 작성할 수 있습니다.");
+      return false;
+   }
+
+   //댓글 내용
+   var vcontent = /^[A-Za-z0-9가-힣]/;
+   var ccontent = document.form1.BOCONTENT.value;
+
+   if(ccontent == "")
+   {
+      alert("댓글 내용을 입력해주세요.");
+      document.form1.BOCONTENT.select();
+      return false;
+   }
+
+   alert("댓글 작성이 완료되었습니다.");
+   f.submit();
+
+}
+
+$(function()
+	{
+    	$("#like_btn").click(function()
+    	{
+    	const BONO = $("#BONO").val();
+        const MEMNICKNAME = $("#MEMNICKNAME").val();
+
+                      //alert("클릭");
+                     console.log(BONO);
+                     console.log(MEMNICKNAME);
+
+                $.ajax({
+                        type:'GET',
+                        url:'updateLike',
+                        dataType:'json',
+                        data:{'BONO':BONO, 'MEMNICKNAME':MEMNICKNAME},
+                       success:function(result)
+    			{
+    				var vnt=JSON.parse(result);
+    				if(result==0)
+    				{
+    					alert("추천 완료");
+    					location.reload();
+    				}
+    				else
+    				{
+    					alert("추천 취소");
+    					location.reload();
+    				}
+
+    			},
+    			error:function(data)
+    			{
+    				alert("전송실패!!");
+    			}
+
+                        });
+
+
+		    });      //end ajax
+    	}); //자료입력
+
+
+</script>
+
+<body>
+
+<!-- detail 영역 시작 -->
+
+<div class="container">
+
+    <div class="cover">
+
+        <div class="contents">
+            <div class="line">
+                <span>자유게시판</span>
+            </div>
+        </div>
+
+        <div class="board_wrap">
+            <div class="board-title">
+                <p th:text="${list.BOTITLE}"></p>
+            </div>
+            <div class="board-info">
+                <span th:text="${list.BOWRITER}"></span>
+                <span class="date" th:text="${list.BOWRITEDAY}"></span>
+                <span class="readcnt">
+                    조회수 : <span th:text="${list.BOREADCNT}"></span>
+                </span>
+                <span class="like">
+                    추천수 : <span th:text="${list.BOLIKE}"></span>
+                </span>
+            </div>
+        </div>
+
+        <div class="board-content">
+            <p>
+                <img th:src="@{/uploadimg/}+${list.BOPICTURE}" width="400">
+            </p>
+            <p th:text="${list.BOCONTENT}"></p>
+
+        </div>
+
+        <div class="gotoboard">
+            <th:block data-th-if="${loginUser != null}"> <!-- 로그인값이 null이 아닐때 -->
+                <input type="hidden" name="BONO" id = "BONO" th:value="${list.BONO}">
+                <input type="hidden" name="BONO" id = "MEMNICKNAME" th:value="${loginUser.MEMNICKNAME}">
+                <button type="button" id="like_btn" class="like-btn" style="color:#DB7093"><i class="fa-regular fa-heart"></i>LIKE</button>
+            </th:block>
+
+            <input type="button" value="목록" th:onclick="location.href='boout'" class="list-btn">
+
+            <th:block data-th-if="${loginUser != null && loginUser.MEMNICKNAME == list.BOWRITER}"> <!-- 로그인값이 null이 아니고 닉네임이 동일할때 -->
+                <input type="button" value="수정" th:onclick= "|location.href='@{modify(BONO=${list.BONO})}'|" class="list-btn">
+                <input type="button" value="삭제" th:onclick= "|location.href='@{delete(BONO=${list.BONO})}'|" class="list-btn">
+            </th:block>
+
+        </div>
+        <!-- detail 영역 끝 -->
+
+        <!-- 댓글 작성 -->
+        <section class="mb-5">
+
+            <div class="card-bg-light">
+                <span class="font-reply" th:text="'댓글'+'['+${list.RECNT}+']'"></span>
+
+                <div class="card-body">
+                    <form class="mb-4" method="post" action="boreply" name="form1">
+
+                        <th:block data-th-if="${loginUser != null}">
+                            <input type="text" placeholder="작성자" th:value="${loginUser.MEMNICKNAME}" name="BOWRITER">
+                        </th:block>
+                        <th:block data-th-if="${loginUser == null}">
+                            <input type="text" placeholder="로그인해주세요"  name="BOWRITER" readonly>
+                        </th:block>
+
+                        <textarea class="form-control" rows="3" placeholder="댓글을 입력하세영" name="BOCONTENT"></textarea>
+
+                        <input type="hidden" name="BONO" th:value="${list.BONO}">
+
+                        <div class="reply-submit">
+                            <input type="button" value="작성" class="reply-btn" onclick="check2()">
+
+                        </div>
+                    </form>
+                    <!-- 댓글 작성 끝 -->
+
+                    <!-- 댓글 출력 -->
+                    <div th:each="reply:${reply}">
+                        <div class="d-flex">
+                            <div class="before-update" id="before-update">
+
+                                <div class="ms-3">
+                                    <div class="fw-bold">
+                                        <i class="fa-sharp fa-solid fa-user"></i>
+                                        <span th:text="${reply.BOWRITER}"></span>
+                                    </div>
+                                    <!--<th:each begin="1" end="${reply.BOINDENT }">
+
+                                    </th:each>
+-->
+                                    <th:block th:each="i: ${#numbers.sequence(0,reply.BOINDENT)}">
+                                        <span>&emsp;</span>
+
+                                    </th:block>
+
+
+                                    <th:block data-th-if="${reply.BOINDENT > 0}">
+                                        <img th:src="@{/image/arraw.PNG}" height="10px" width="10px">
+                                    </th:block>
+                                    <span th:text="${reply.BOCONTENT}"></span>
+                                </div>
+
+                                <!--대댓글 아코디언-->
+                                <div class="rerebtn">
+                                    <!--   대댓글 입력-->
+                                    <th:block data-th-if="${loginUser != null}">
+                                        <input type="button" value="답글" class="accordion">
+                                    </th:block>
+
+                                    <div class="panel">
+                                        <form action="borereply" method="post">
+                                            <input type="hidden" name="BONO" th:value="${reply.BONO }">
+                                            <input type="hidden" name="BOWRITEDAY" th:value="${reply.BOWRITEDAY }">
+                                            <input type="hidden" name=BOGROUPS th:value="${reply.BOGROUPS }">
+                                            <input type="hidden" name="BOWRITER" th:value="${reply.BOWRITER }">
+                                            <input type="hidden" name="BOSTEP" th:value="${reply.BOSTEP }">
+                                            <input type="hidden" name="BOINDENT" th:value="${reply.BOINDENT }">
+
+                                            <div class="rereply-writer">
+
+                                                <th:block data-th-if="${loginUser != null}">
+                                                    <input type="text" placeholder="대댓글작성자" th:value="${loginUser.MEMNICKNAME}" class="rerewriter-btn" name="RWRITER" readonly>
+                                                </th:block>
+                                                <th:block data-th-if="${loginUser == null}">
+                                                    <input type="text" placeholder="로그인해주세요"  name="BOWRITER" readonly>
+                                                </th:block>
+
+                                            </div>
+
+                                            <textarea class="form-control" rows="3" placeholder="답글을 입력하세영" name="RCONTENT"></textarea>
+
+                                            <div class="rereply-submit">
+                                                <input type="submit" value="작성" class="reply-btn">
+                                            </div>
+                                        </form>
+                                    </div>
+                                    <!--대댓글 입력 끝-->
+
+                                    <!-- 댓글 수정 -->
+                                    <th:block data-th-if="${loginUser != null && loginUser.MEMNICKNAME == reply.BOWRITER}">
+                                        <input type="button" value="수정" class="accordion">
+
+                                        <div class="panel">
+                                            <form action="ReUpdateForm" method="post">
+                                                <div class="rereply-writer">
+
+                                                    <input type="hidden" name="BONO" th:value="${reply.BONO }">
+                                                    <input type="hidden" name="BORNO" th:value="${reply.BORNO }">
+                                                    <input type="hidden" name="BOWRITEDAY" th:value="${reply.BOWRITEDAY }">
+                                                    <input type="hidden" name=BOGROUPS th:value="${reply.BOGROUPS }">
+                                                    <input type="hidden" name="BOSTEP" th:value="${reply.BOSTEP }">
+                                                    <input type="hidden" name="BOINDENT" th:value="${reply.BOINDENT }">
+
+                                                    <th:block data-th-if="${loginUser != null}">
+                                                        <input type="text" placeholder="댓글작성자" name="BOWRITER" th:value="${loginUser.MEMNICKNAME}" readonly class="reply-btn">
+                                                    </th:block>
+                                                    <th:block data-th-if="${loginUser == null}">
+                                                        <input type="text" placeholder="로그인해주세요"  name="BOWRITER" readonly>
+                                                    </th:block>
+
+                                                </div>
+
+                                                <textarea class="form-control" rows="3" placeholder="댓글수정" name="BOCONTENT"></textarea>
+                                                <div class="rereply-submit">
+                                                    <input type="submit" value="수정"  class="reply-btn">
+                                                </div>
+
+                                            </form>
+                                        </div>
+
+
+
+                                        <input type="button" value="삭제" th:onclick= "|location.href='@{boredelete(BORNO=${reply.BORNO})}'|" class="list-btn">
+
+
+
+
+                                    </th:block>
+
+
+                                </div>
+                                <!-- 대댓글 아코디언 끝-->
+
+
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+
+    </div>
+</div>
+
+</body>
+<div th:replace="footer::footer"></div>
+
+
+</html>

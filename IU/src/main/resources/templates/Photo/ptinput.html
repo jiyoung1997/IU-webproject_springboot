@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+
+<html xmlns:th="http://www.thymeleaf.org">
+<div th:replace="top::top"></div>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+<script src="https://kit.fontawesome.com/8d3fc93edf.js" crossorigin="anonymous"></script>
+<link th:href="@{/css/board_write.css}" rel="stylesheet"/>
+<script type="text/javascript">
+
+	function check5()
+	{
+		var f = document.form5;
+
+		//제목
+		var vtitle = /^[A-Za-z0-9가-힣]/;
+		var ctitle = document.form5.PTTITLE.value;
+		if(ctitle=="")
+			{
+				alert("제목을 입력해주세요.");
+				document.form5.PTTITLE.select();
+				return false;
+			}
+
+		//내용
+		var vcontent = /^[A-Za-z0-9가-힣]/;
+		var ccontent = document.form5.PTCONTENT.value;
+		if(ccontent=="")
+			{
+				alert("내용을 입력해주세요.");
+				document.form5.PTCONTENT.select();
+				return false;
+			}
+
+		//이미지
+		var vpicture = /(.*?)\.(jpg|jpeg|png|gif|bmp|pdf)$/;
+		var cpicture = document.form5.PTPICTURE.value;
+		if(cpicture=="")
+			{
+				alert("이미지를 선택해주세요.");
+				document.form5.PTPICTURE.select();
+				return false;
+			}
+
+		alert("작성완료되었습니다.");
+		f.submit();
+	}
+
+</script>
+
+
+
+
+
+<body>
+<div class="container">
+  <div class="cover">
+
+    <div class="contents">
+      <div class="line">
+        <span> 포토게시판 작성 </span>
+      </div>
+
+      <div class="form">
+        <form th:action="ptsave" method="post" enctype="multipart/form-data" name="form5">
+          <div class="line-title">
+            <label >제목</label>
+            <input type="text" name="PTTITLE" placeholder="제목" class="title">
+          </div>
+     <!--th:field="*{name}-->
+        <!--<p th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></p>-->
+          <div class="line-write">
+            <label >작성자</label><br>
+            <input type="text"  name="PTWRITER" th:value="${loginUser.MEMNICKNAME}" class="writer" ><br>
+          </div>
+
+          <div class="line-content">
+            <label>내용</label>
+            <textarea id="subject" name="PTCONTENT" placeholder="내용을 입력하세요.." style="height:200px"  class="content"></textarea>
+          </div>
+
+          <label>이미지</label>
+          <div class="upload">
+            <button type="button" class="btn-warning">
+              <i class="fa-solid fa-upload"></i>
+              Upload file
+              <input type="file" name="PTPICTURE">
+            </button>
+          </div>
+
+          <div class="boardsubmit">
+            <input type="button" value="등록"  class="submit-btn" onclick="check5()" >
+          </div>
+
+        </form>
+      </div>
+    </div>
+    <div class="gotoboard">
+      <input type="button" value="목록" th:onclick="location.href='ptout'" >
+    </div>
+
+  </div></div>
+
+
+</body>
+<div th:replace="footer::footer"></div>
+</html>

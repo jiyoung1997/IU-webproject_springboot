@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+
+<html xmlns:th="http://www.thymeleaf.org">
+<div th:replace="top::top"></div>
+
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+<script src="https://kit.fontawesome.com/8d3fc93edf.js" crossorigin="anonymous"></script>
+
+<link th:href="@{/css/board_write.css}" rel="stylesheet"/>
+
+<body>
+
+<div class="container">
+    <div class="cover">
+
+        <div class="contents">
+            <div class="line">
+                <span>게시글 수정</span>
+            </div>
+
+            <div class="form">
+                <form action="ntmodifydata" method="post">
+
+                    <div th:each="list:${list}">
+
+                        <input type="hidden" name="NTNO" th:value="${list.NTNO}">
+                        <input type="hidden" name="NTREADCNT" th:value="${list.NTREADCNT}">
+
+                        <div class="line-title">
+                            <label >제목</label>
+                            <input type="text" name="NTTITLE" placeholder="제목" class="title" th:value="${list.NTTITLE}">
+                        </div>
+
+                        <div class="line-content">
+                            <label>내용</label>
+                            <textarea id="subject" name="NTCONTENT" th:placeholder="${list.NTCONTENT}" style="height:200px" class="content"></textarea>
+                        </div>
+
+                        <div class="boardsubmit">
+                            <input type="submit" value="수정" class="submit-btn">
+                            <input type="button" value="취소" th:onclick="location.href='ntout'" class="submit-btn">
+                        </div>
+
+                    </div>
+
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+<div th:replace="footer::footer"></div>
+
+</html>

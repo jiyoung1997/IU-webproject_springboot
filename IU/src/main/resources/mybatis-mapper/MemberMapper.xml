@@ -1,0 +1,14 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.project.IU.mapper.Membermapper">
+
+    <select id="login" resultType="com.project.IU.DTO.MemberDTO">
+        SELECT * FROM MEMBER2
+        WHERE MEMID = #{param1}
+        AND MEMPW = #{param2}
+    </select>
+
+
+</mapper>

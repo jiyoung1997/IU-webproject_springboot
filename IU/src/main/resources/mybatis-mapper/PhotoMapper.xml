@@ -1,0 +1,81 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.project.IU.mapper.PhotoMapper">
+    <insert id="ptreplysave">
+        INSERT INTO PTREPLY2(PTNO,PTRNO,PTWRITER,PTCONTENT,PTGROUPS,PTSTEP,PTINDENT)
+        VALUES(#{param1},PTRNO_SEQ.NEXTVAL,#{param2},#{param3},PTRNO_SEQ.CURRVAL,1,0)
+    </insert>
+    <select id="ptreplylist" resultType="com.project.IU.DTO.PtReplyDTO">
+        SELECT PTNO,PTRNO,TO_CHAR(PTWRITEDAY, 'YYYY-MM-DD')PTWRITEDAY,PTWRITER,PTCONTENT,PTGROUPS,PTSTEP,PTINDENT
+        FROM PTREPLY2 WHERE PTNO=#{param1} ORDER BY PTGROUPS ASC, PTRNO ASC, PTSTEP ASC
+    </select>
+    <!-- search -->
+    <!-- <select id="titlesearch" resultType="com.project.IU.DTO.BoardDTO">
+        select * from BOARD2 where BOTITLE like '%'||#{param2}||'%'
+    </select>
+    <select id="writersearch" resultType="com.project.IU.DTO.BoardDTO">
+        select * from BOARD2 where BOWRITER like '%'||#{param6}||'%'
+    </select> -->
+
+
+    <!-- search 끝 -->
+
+    <update id="ptmakereply">
+        UPDATE PTREPLY2 SET PTSTEP=PTSTEP+1 WHERE PTGROUPS=#{param1} and PTSTEP>#{param2}
+    </update>
+
+    <insert id="ptrereply">
+        INSERT INTO PTREPLY2(PTNO,PTRNO,PTWRITER,PTCONTENT,PTGROUPS,PTSTEP,PTINDENT)
+        VALUES(#{param1},PTRNO_SEQ.NEXTVAL,#{param2},#{param3},#{param4},#{param5},#{param6})
+    </insert>
+
+    <update id="recnt">
+        UPDATE PHOTO2  SET PTRECNT = (SELECT COUNT(PTRNO) FROM PTREPLY2 WHERE PTNO=#{PTNO}) WHERE PTNO = #{PTNO}
+    </update>
+
+    <delete id="ptredelete">
+        DELETE FROM PTREPLY2 WHERE PTRNO=#{PTRNO}
+    </delete>
+    <select id="ptno" resultType="int">
+        SELECT PTNO FROM PTREPLY2 WHERE PTRNO=#{PTRNO}
+    </select>
+
+
+    <update id="PTReUpdateForm">
+        update PTREPLY2 set PTCONTENT=#{param4} where PTRNO=#{param2}
+    </update>
+
+
+
+    <!-- 추천 저장 -->
+    <insert id="insertLike">
+        insert into PTLIKE2(PLINO , PTNO , MEMNICKNAME , LIKECHECK)
+        values(PLINO_SEQ.NEXTVAL,#{param1},#{param2},0)
+    </insert>
+    <!-- 댓글 추천수 -->
+    <update id="updateLike" >
+        update PHOTO2 set
+        PTLIKE = PTLIKE+1
+        where PTNO = #{PTNO}
+    </update>
+    <!-- 댓글 추천 중복방지 select문 -->
+    <select id="LikeCheck" resultType="int">
+        select count(LIKECHECK) from PTLIKE2 where PTNO = #{param1} and MEMNICKNAME = #{param2}
+    </select>
+    <!-- 댓글 추천수 취소 -->
+    <update id="UpdateLikeCancle">
+        update PHOTO2 set
+        PTLIKE = PTLIKE-1
+        where PTNO = #{PTNO}
+    </update>
+    <!-- 댓글 추천취소 시 delete -->
+    <delete id="deleteLike">
+        delete from PTLIKE2 where PTNO = #{param1} and MEMNICKNAME = #{param2}
+    </delete>
+
+
+
+
+</mapper>

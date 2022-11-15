@@ -1,0 +1,65 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.project.IU.mapper.BoardMapper">
+    <insert id="boreplysave">
+        INSERT INTO BOREPLY2(BONO,BORNO,BOWRITER,BOCONTENT,BOGROUPS,BOSTEP,BOINDENT)
+        VALUES(#{param1},BORNO_SEQ.NEXTVAL,#{param2},#{param3},BORNO_SEQ.CURRVAL,1,0)
+    </insert>
+    <select id="boreplylist" resultType="com.project.IU.DTO.BoreplyDTO">
+        SELECT BONO,BORNO,TO_CHAR(BOWRITEDAY, 'YYYY-MM-DD')BOWRITEDAY,BOCONTENT,BOWRITER,BOGROUPS,BOSTEP,BOINDENT
+        FROM BOREPLY2 WHERE BONO=#{param1} ORDER BY BOGROUPS ASC, BORNO ASC, BOSTEP ASC
+    </select>
+    <update id="bomakereply">
+        UPDATE BOREPLY2 SET BOSTEP=BOSTEP+1 WHERE BOGROUPS=#{param1} and BOSTEP>#{param2}
+    </update>
+
+    <insert id="borereply">
+        INSERT INTO BOREPLY2(BONO,BORNO,BOWRITER,BOCONTENT,BOGROUPS,BOSTEP,BOINDENT)
+        VALUES(#{param1},BORNO_SEQ.NEXTVAL,#{param2},#{param3},#{param4},#{param5},#{param6})
+    </insert>
+
+    <update id="recnt">
+        UPDATE BOARD2  SET RECNT = (SELECT COUNT(BORNO) FROM BOREPLY2 WHERE BONO=#{BONO}) WHERE BONO = #{BONO}
+    </update>
+    <delete id="boredelete">
+        DELETE FROM BOREPLY2 WHERE BORNO=#{BORNO}
+    </delete>
+    <select id="bono" resultType="int">
+        SELECT BONO FROM BOREPLY2 WHERE BORNO=#{BORNO}
+    </select>
+    <update id="ReUpdateForm">
+        update BOREPLY2 set BOCONTENT=#{param4} where BORNO=#{param2}
+    </update>
+
+
+    <!-- 추천 중복방지 select문 -->
+    <select id="LikeCheck" resultType="int">
+        select count(LIKECHECK) from BOLIKE2 where BONO = #{param1} and MEMNICKNAME = #{param2}
+    </select>
+
+    <!-- 추천 저장 -->
+    <insert id="insertLike">
+        insert into BOLIKE2(LINO , BONO , MEMNICKNAME , LIKECHECK)
+        values(LINO_SEQ.NEXTVAL,#{param1},#{param2},0)
+    </insert>
+    <!-- 추천수 -->
+    <update id="updateLike" >
+        update BOARD2 set
+        BOLIKE = BOLIKE+1
+        where BONO = #{BONO}
+    </update>
+
+    <!-- 추천수 취소 -->
+    <update id="UpdateLikeCancle">
+        update BOARD2 set
+        BOLIKE = BOLIKE-1
+        where BONO = #{BONO}
+    </update>
+    <!-- 추천취소 시 delete -->
+    <delete id="deleteLike">
+        delete from BOLIKE2 where BONO = #{param1} and MEMNICKNAME = #{param2}
+    </delete>
+
+</mapper>
